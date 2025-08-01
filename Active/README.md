@@ -1,3 +1,3 @@
 
 
-![HTB Access Box](images/confirm.png)
+![HTB Access Box](confirm.png)
