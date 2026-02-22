@@ -47,8 +47,4 @@ Key techniques and vulnerabilities covered across these machines:
 - **Privilege Escalation (Windows):** Token impersonation, SeBackupPrivilege + NTDS.dit extraction, AlwaysInstallElevated, password manager cracking.
 - **Active Directory:** BloodHound ACL chaining, DCSync, Azure AD Connect credential extraction, Password Safe abuse.
 
----
 
-<p align="center">
-  <i>"The only truly secure system is one that is powered off, cast in a block of concrete and sealed in a lead-lined room with armed guards."</i><br>— Eugene H. Spafford
-</p>
