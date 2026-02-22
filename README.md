@@ -9,8 +9,7 @@
 <p align="center">
   <a href="#about">About</a> •
   <a href="#contents">Contents</a> •
-  <a href="#highlights">Highlights</a> •
-  <a href="#disclaimer">Disclaimer</a>
+  <a href="#highlights">Highlights</a>
 </p>
 
 ---
@@ -25,16 +24,13 @@ Whether you're studying for the OSCP, preparing for a CTF, or just looking to sh
 
 ## 📂 Contents
 
-Writeups are organized by operating system:
+Each machine has its own folder containing a full `README.md` writeup and an `images/` directory with referenced screenshots. Every writeup follows a consistent structure:
 
-### 🐧 Linux
-From exploiting vulnerable web applications and outdated services to abusing misconfigurations like world-writable cron jobs, SUID binaries, and weak sudo rules.
-
-### 🪟 Windows
-Exploiting IIS servers, abusing service account privileges, leveraging SMB misconfigurations, and classic Windows privilege escalation via `SeImpersonatePrivilege` (PrintSpoofer/GodPotato/JuicyPotato) and `AlwaysInstallElevated`.
-
-### 🏢 Active Directory
-Domain enumeration with BloodHound, AS-REP Roasting, Kerberoasting, DCSync, ACL abuse (GenericAll, WriteDacl, ForceChangePassword), and credential extraction from Azure AD Connect and LAPS.
+- **TL;DR** — One-paragraph summary of the entire attack path
+- **Enumeration** — Port scans, service fingerprinting, and discovery
+- **Exploitation** — Step-by-step with commands and explanations
+- **Privilege Escalation** — Local privesc to root or SYSTEM
+- **Key Takeaways** — Security lessons from the box
 
 ---
 
@@ -48,12 +44,6 @@ Key techniques and vulnerabilities covered across these machines:
 - **Privilege Escalation (Linux):** Writable cronjobs, SUID abuse, sudo GTFOBins, pspy process monitoring.
 - **Privilege Escalation (Windows):** Token impersonation, SeBackupPrivilege + NTDS.dit extraction, AlwaysInstallElevated, password manager cracking.
 - **Active Directory:** BloodHound ACL chaining, DCSync, Azure AD Connect credential extraction, Password Safe abuse.
-
----
-
-## ⚠️ Disclaimer
-
-All information and writeups in this repository are for **educational purposes only**. All machines documented here are **retired** HackTheBox labs. Do not use these techniques on systems you do not own or do not have explicit permission to test.
 
 ---
 
