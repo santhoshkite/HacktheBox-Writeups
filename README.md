@@ -1,7 +1,5 @@
 # 🧠 HackTheBox Writeups
 
-> A collection of detailed, in-depth walkthroughs for machines I've solved on HackTheBox — written in a clear narrative style with full command explanations, screenshots, and key takeaways.
-
 ---
 
 ## 📖 About
