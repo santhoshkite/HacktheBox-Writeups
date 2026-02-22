@@ -54,9 +54,13 @@ bloodhound-python -u Olivia -p ichliebedich -d administrator.htb -c all --zip -n
 ```
 
 We load the resulting ZIP file into the Bloodhound GUI. 
+
+![Screenshot](images/Screenshot_2024-12-17_at_10.54.45_PM.png)
 Analyzing the shortest paths to high-value targets, we discover our starting user, `Olivia`, holds `GenericAll` privileges over another user named `Michael`. 
 
 `GenericAll` grants full control over the target object, which inherently includes the ability to forcefully change their password. We reset Michael's password from our attacking machine:
+
+![Screenshot](images/Screenshot_2024-12-16_at_7.58.31_PM.png)
 
 ```bash
 net rpc password "michael" "Password123!" -U "administrator.htb/Olivia"%"ichliebedich" -S 10.10.11.42
@@ -64,6 +68,8 @@ net rpc password "michael" "Password123!" -U "administrator.htb/Olivia"%"ichlieb
 *(Alternatively, we can use `rpcclient` or PowerView if executing from a Windows context).*
 
 With control of `Michael`, we return to Bloodhound to check his privileges. We discover that `Michael` has the specific right to reset the password for `Benjamin`. 
+
+![Screenshot](images/Screenshot_2024-12-16_at_7.51.55_PM.png)
 
 We reset `Benjamin`'s password. (The raw notes use PowerShell/PowerView format, which can be executed if we have a shell, or we can repeat the remote RCP password reset):
 
@@ -95,6 +101,8 @@ john backup.hash --wordlist=/usr/share/wordlists/rockyou.txt
 
 The master password cracks to: `tekieromucho`.
 
+![Screenshot](images/Screenshot_2024-12-17_at_11.00.29_PM.png)
+
 We install the `pwsafe` utility on our Kali machine (or use a compatible GUI) to open the database:
 
 ```bash
@@ -121,6 +129,8 @@ hashcat -m 13100 ethan.hash /usr/share/wordlists/rockyou.txt
 ```
 
 The password cracks to: `ethan : limpbizkit`.
+
+![Screenshot](images/Screenshot_2024-12-17_at_11.11.10_PM.png)
 
 Consulting Bloodhound one final time, we find that the `Ethan` account has `DS-Replication-Get-Changes-All` privileges over the domain. This means Ethan has the right to perform a **DCSync attack**.
 

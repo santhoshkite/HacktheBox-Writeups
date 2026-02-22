@@ -51,6 +51,8 @@ Navigating to `http://school.flight.htb` reveals a static page, but the URL util
 
 By modifying the parameter to read `index.php`, we can examine the source code of the application:
 
+![Screenshot](images/Screenshot_2024-08-02_at_3.38.27_PM.png)
+
 ```text
 http://school.flight.htb/index.php?view=index.php
 ```
@@ -94,6 +96,8 @@ We crack this offline using Hashcat and the RockYou wordlist.
 
 Using crackmapexec with these new credentials, we enumerate a full list of domain users. Assuming they might reuse passwords or have a default password scheme, we password spray the `S@Ss!K@*t13` password across all domain users. 
 
+![Screenshot](images/Screenshot_2024-08-02_at_3.38.27_PM.png)
+
 This reveals that the user `s.moon` shares the exact same password!
 `s.moon : S@Ss!K@*t13`
 
@@ -124,6 +128,8 @@ Once on the machine via WinRM, we find we have write access to `C:\inetpub\devel
 We place an ASPX web shell (`cmdasp.aspx`) into the `development` folder. To interact with it, we establish a local port forward using Ligolo-NG or Chisel to tunnel port 8000 out to our attacking machine.
 
 Accessing our newly uploaded web shell at `http://127.0.0.1:8000/cmdasp.aspx` through the tunnel, we execute commands as the IIS service account (`iis apppool\defaultapppool`). 
+
+![Screenshot](images/Screenshot_2024-08-03_at_1.36.02_AM.png)
 
 Checking privileges (`whoami /priv`) confirms that we hold `SeImpersonatePrivilege`.
 

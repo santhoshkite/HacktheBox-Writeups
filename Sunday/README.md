@@ -71,6 +71,8 @@ sudo -l
 ```
 
 The output indicates that `sunny` can run the following file as `root` without a password:
+
+![Screenshot](images/Screenshot_2024-08-18_at_7.04.32_PM.png)
 `/root/troll`
 
 We run the file (`sudo /root/troll`), but it simply outputs a troll message and exits. We do not have write permissions to modify the file directly as the `sunny` user.

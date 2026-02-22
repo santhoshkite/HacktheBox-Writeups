@@ -49,6 +49,8 @@ dir -a
 ```
 
 By explicitly navigating to the hidden path, we successfully access the PRTG data directory:
+
+![Screenshot](images/Screenshot_2024-08-18_at_12.29.02_PM.png)
 ```ftp
 cd ProgramData
 cd Paessler

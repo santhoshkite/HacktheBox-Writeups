@@ -66,6 +66,8 @@ The spray attack yields a success: `SABatchJobs : SABatchJobs`.
 
 With these valid credentials, we enumerate the SMB shares again (`smbclient -L //10.10.10.172 -U SABatchJobs`). We find we have read access to the `users$` share.
 
+![Screenshot](images/Screenshot_2024-07-29_at_10.18.38_PM.png)
+
 We recursively download and explore the `users$` share and check the folders for each user. Inside `mhope`'s directory, we find a file (typically an XML configuration file or a text document) named `azure.xml` containing a plaintext password.
 
 ```text
@@ -87,6 +89,8 @@ We now have remote command execution as the user `mhope`.
 Checking our local group memberships and system context, we notice a couple of things:
 1. `mhope` is a member of the **Azure Admins** group.
 2. The server is running **Azure AD Connect**, **Azure AD Sync**, and a local Microsoft SQL (MSSQL) server instance.
+
+![Screenshot](images/Screenshot_2024-07-31_at_12.44.37_PM.png)
 
 Azure AD Connect is used to synchronize on-premises Active Directory objects with Azure Active Directory. To perform synchronization, Azure AD Connect stores highly privileged AD credentials (frequently a Domain Admin equivalent account) in a local LocalDB SQL database (`ADSync`).
 

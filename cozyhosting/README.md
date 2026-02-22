@@ -29,6 +29,8 @@ nmap -sC -sV -p- -n -Pn --min-rate=9018 10.10.11.230
 Nmap shows HTTP traffic redirecting to `http://cozyhosting.htb`. We add this to our `/etc/hosts` file.
 Navigating to the site reveals a static hosting provider landing page. There is a "Login" button that leads to `/login`, but default credentials do not work.
 
+![Screenshot](images/Screenshot_2024-09-13_at_1.28.16_PM.png)
+
 Intentionally triggering a 404 error by visiting a non-existent page reveals a "Whitelabel Error Page", confirming the backend application is built with **Java Spring Boot**.
 
 We use `gobuster` along with a Spring Boot-specific wordlist from SecLists to look for exposed debugging endpoints:
@@ -112,6 +114,8 @@ Inside the database (`\c cozyhosting`), we query the `users` table (`select * fr
 
 - `kanderson`
 - `admin : $2a$10$SpKYdHLB0FOaT7n3x72wtuS0yR8uqqbNNpIPjUb2MZib3H9kVO8dm`
+
+![Screenshot](images/Screenshot_2024-09-13_at_1.46.25_PM.png)
 
 We copy the `admin` hash and crack it offline using Hashcat:
 
