@@ -24,13 +24,15 @@ Whether you're studying for the OSCP, preparing for a CTF, or just looking to sh
 
 ## 📂 Contents
 
-Each machine has its own folder containing a full `README.md` writeup and an `images/` directory with referenced screenshots. Every writeup follows a consistent structure:
+Writeups are organized by operating system:
 
-- **TL;DR** — One-paragraph summary of the entire attack path
-- **Enumeration** — Port scans, service fingerprinting, and discovery
-- **Exploitation** — Step-by-step with commands and explanations
-- **Privilege Escalation** — Local privesc to root or SYSTEM
-- **Key Takeaways** — Security lessons from the box
+### 🐧 Linux
+Exploiting vulnerable web applications, outdated services, misconfigured cron jobs, SUID binaries, and weak sudo rules.
+
+### 🪟 Windows
+IIS and web CMS exploitation, SMB misconfigurations, token impersonation, Active Directory ACL abuse, Kerberoasting, DCSync, and more.
+
+Each machine gets its own folder with a `README.md` walkthrough and an `images/` directory. Every writeup follows the same structure: **TL;DR** → **Enumeration** → **Exploitation** → **Privilege Escalation** → **Key Takeaways**.
 
 ---
 
