@@ -54,13 +54,13 @@ bloodhound-python -u Olivia -p ichliebedich -d administrator.htb -c all --zip -n
 ```
 
 We load the resulting ZIP file into the Bloodhound GUI. 
-
-![Screenshot](images/Screenshot_2024-12-17_at_10.54.45_PM.png)
 Analyzing the shortest paths to high-value targets, we discover our starting user, `Olivia`, holds `GenericAll` privileges over another user named `Michael`. 
+
+![BloodHound — Olivia has GenericAll over Michael](images/Screenshot_2024-12-16_at_7.51.55_PM.png)
 
 `GenericAll` grants full control over the target object, which inherently includes the ability to forcefully change their password. We reset Michael's password from our attacking machine:
 
-![Screenshot](images/Screenshot_2024-12-16_at_7.58.31_PM.png)
+![BloodHound — Michael has ForceChangePassword over Benjamin](images/Screenshot_2024-12-16_at_7.58.31_PM.png)
 
 ```bash
 net rpc password "michael" "Password123!" -U "administrator.htb/Olivia"%"ichliebedich" -S 10.10.11.42
@@ -69,7 +69,7 @@ net rpc password "michael" "Password123!" -U "administrator.htb/Olivia"%"ichlieb
 
 With control of `Michael`, we return to Bloodhound to check his privileges. We discover that `Michael` has the specific right to reset the password for `Benjamin`. 
 
-![Screenshot](images/Screenshot_2024-12-16_at_7.51.55_PM.png)
+![BloodHound — Benjamin's group memberships and permissions](images/Screenshot_2024-12-16_at_7.51.55_PM.png)
 
 We reset `Benjamin`'s password. (The raw notes use PowerShell/PowerView format, which can be executed if we have a shell, or we can repeat the remote RCP password reset):
 
@@ -84,6 +84,8 @@ We now have control of the `Benjamin` account (`Benjamin : P@ssw0rd123!`).
 ## Privilege Escalation — Password Safes & Targeted Kerberoasting
 
 Checking `Benjamin`'s group memberships, we see he is part of the "Share Moderators" group. We use `smbclient` or `ftp` to check for accessible shares. In a restricted share, we find a backup file: `Backup.psafe3`.
+
+![Benjamin's FTP share access showing Backup.psafe3](images/Screenshot_2024-12-17_at_10.54.45_PM.png)
 
 A `.psafe3` file is an encrypted password database created by the application Password Safe. To open it, we must crack the master password.
 
@@ -101,15 +103,15 @@ john backup.hash --wordlist=/usr/share/wordlists/rockyou.txt
 
 The master password cracks to: `tekieromucho`.
 
-![Screenshot](images/Screenshot_2024-12-17_at_11.00.29_PM.png)
-
 We install the `pwsafe` utility on our Kali machine (or use a compatible GUI) to open the database:
 
 ```bash
 pwsafe Backup.psafe3
 ```
 
-Inside the vault, we find passwords for three users. The most interesting account is `Emily`, as her group memberships (viewed in Bloodhound) suggest a path to persistence or escalation.
+Inside the vault, we find passwords for three users.
+
+![Password Safe vault contents — Emily, Ethan, and a third user](images/Screenshot_2024-12-17_at_11.00.29_PM.png)
 `Emily : UXLCI5iETUsIBoFVTj8yQFKoHjXmb`
 
 We attempt to change her password or move laterally, but face restrictions. However, looking at the AD configuration, we realize we can leverage her credentials to perform a **Targeted Kerberoast** attack against the user `Ethan`.
@@ -130,9 +132,9 @@ hashcat -m 13100 ethan.hash /usr/share/wordlists/rockyou.txt
 
 The password cracks to: `ethan : limpbizkit`.
 
-![Screenshot](images/Screenshot_2024-12-17_at_11.11.10_PM.png)
+Consulting Bloodhound one final time, we find that the `Ethan` account has `DS-Replication-Get-Changes-All` privileges over the domain.
 
-Consulting Bloodhound one final time, we find that the `Ethan` account has `DS-Replication-Get-Changes-All` privileges over the domain. This means Ethan has the right to perform a **DCSync attack**.
+![BloodHound — Ethan has DCSync rights over the domain](images/Screenshot_2024-12-17_at_11.11.10_PM.png)
 
 We use Impacket's `secretsdump.py` to execute the DCSync attack and dump the NTLM hash of the built-in Domain Administrator:
 

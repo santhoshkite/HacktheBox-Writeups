@@ -49,9 +49,9 @@ The scan successfully identifies `school.flight.htb`. We add both `flight.htb` a
 
 Navigating to `http://school.flight.htb` reveals a static page, but the URL utilizes a file inclusion parameter: `index.php?view=home.html`.
 
-By modifying the parameter to read `index.php`, we can examine the source code of the application:
+By modifying the parameter to read `index.php`, we can examine the source code of the application. The source code reveals a blacklist filter intended to prevent directory traversal:
 
-![Screenshot](images/Screenshot_2024-08-02_at_3.38.27_PM.png)
+![LFI source code blacklist filter in school.flight.htb](images/Screenshot_2024-08-02_at_3.38.27_PM.png)
 
 ```text
 http://school.flight.htb/index.php?view=index.php
@@ -95,8 +95,6 @@ We crack this offline using Hashcat and the RockYou wordlist.
 `svc_apache : S@Ss!K@*t13`
 
 Using crackmapexec with these new credentials, we enumerate a full list of domain users. Assuming they might reuse passwords or have a default password scheme, we password spray the `S@Ss!K@*t13` password across all domain users. 
-
-![Screenshot](images/Screenshot_2024-08-02_at_3.38.27_PM.png)
 
 This reveals that the user `s.moon` shares the exact same password!
 `s.moon : S@Ss!K@*t13`

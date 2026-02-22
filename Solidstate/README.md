@@ -16,8 +16,6 @@ JAMES Remote Administration Tool (Port 4555) allows unauthenticated access using
 
 Full nmap scan:
 
-![Screenshot](images/Screenshot_2024-08-09_at_5.58.08_PM.png)
-
 ```bash
 nmap -sC -sV -p- -n -Pn --min-rate=9018 10.10.10.51
 ```
@@ -49,51 +47,36 @@ nc 10.10.10.51 4555
 The console prompts for a login ID and password. Trying the default credentials for Apache JAMES (`root : root`) successfully authenticates us as an administrator.
 
 Inside the administration console, we type `help` to list commands and `listusers` to enumerate the existing mail accounts:
-- `james`
-- `thomas`
-- `john`
 
-![Screenshot](images/Screenshot_2024-08-09_at_1.29.00_PM.png)
-- `mindy`
-- `mailadmin`
+![JAMES admin listusers output](images/Screenshot_2024-08-09_at_1.23.25_PM.png)
+
+The output shows users: `james`, `thomas`, `john`, `mindy`, and `mailadmin`.
 
 Since we are inside the admin console, we have the authority to change the passwords for any of these users without knowing their current passwords. We use the `setpassword` command:
 
 ```text
 setpassword john john
 setpassword mindy mindy
-
-![Screenshot](images/Screenshot_2024-08-09_at_1.30.06_PM.png)
 ```
+
+![JAMES setpassword command](images/Screenshot_2024-08-09_at_1.26.05_PM.png)
 
 With the passwords reset, we can now log into the POP3 service on port 110 to read their emails. We use `telnet` or `nc`:
 
 ```bash
 nc 10.10.10.51 110
-Trying 10.10.10.51...
-Connected to 10.10.10.51.
-+OK solidstate POP3 server (JAMES POP3 Server 2.3.2) ready 
-
-![Screenshot](images/Screenshot_2024-08-09_at_1.26.05_PM.png)
 ```
 
-We log in as `john`:
-```text
-USER john
+We log in as `john` then as `mindy` to read her email:
 
-![Screenshot](images/Screenshot_2024-08-09_at_1.23.25_PM.png)
-PASS john
-LIST
-RETR 1
-```
-
-John's emails don't contain anything immediately useful to gain a shell. Next, we log in as `mindy`:
 ```text
 USER mindy
 PASS mindy
 LIST
 RETR 2
 ```
+
+![POP3 login as mindy revealing SSH credentials](images/Screenshot_2024-08-09_at_1.29.00_PM.png)
 
 In Mindy's second email, an administrator provides her with temporary SSH credentials to access the machine directly:
 `mindy : P@55W0rd1!2@`
@@ -103,6 +86,8 @@ We use these credentials to authenticate via SSH:
 ```bash
 ssh mindy@10.10.10.51
 ```
+
+![JAMES admin console listing of mailboxes](images/Screenshot_2024-08-09_at_1.30.06_PM.png)
 
 We have user access.
 
@@ -120,10 +105,9 @@ We execute `pspy32` to watch for recurring background processes:
 
 After a few minutes, we observe the `root` user executing a Python script every 3 minutes:
 
-![Screenshot](images/Screenshot_2024-08-09_at_5.41.33_PM.png)
-`/opt/tmp.py`
+![pspy32 output showing root running /opt/tmp.py](images/Screenshot_2024-08-09_at_5.41.33_PM.png)
 
-We check the permissions of the script:
+The script running is `/opt/tmp.py`. We check the permissions of the script:
 
 ```bash
 ls -la /opt/tmp.py
@@ -147,6 +131,8 @@ EOF
 
 We start a Netcat listener on port 2222 on our attacking machine. 
 Within three minutes, the root cronjob triggers, executes our modified Python script, and shovels a reverse shell to our listener.
+
+![Netcat listener catching a root shell](images/Screenshot_2024-08-09_at_5.58.08_PM.png)
 
 We are `root`. 🎉
 

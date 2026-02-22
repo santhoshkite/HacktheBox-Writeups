@@ -77,9 +77,9 @@ Loading the zipped data into BloodHound, we discover that the `support` user has
 
 ```bash
 net rpc password audit2020 -U support -S 10.10.10.192
-
-![Screenshot](images/Screenshot_2024-09-23_at_3.58.48_PM.png)
 ```
+
+![BloodHound ForceChangePassword edge from support to audit2020](images/Screenshot_2024-09-23_at_3.58.48_PM.png)
 
 Now we have access to the `audit2020` account. Re-enumerating the SMB shares with these new credentials shows that `audit2020` has read access to the `forensic` share:
 

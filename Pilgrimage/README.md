@@ -50,13 +50,13 @@ git-dumper http://pilgrimage.htb/ git_dump/
 cd git_dump/
 ```
 
-Reviewing the downloaded source code (specifically `index.php`), we observe that the application relies on an external binary called `magick` to resize the uploaded images. 
+Reviewing the downloaded source code (specifically `index.php`), we observe that the application relies on an external binary called `magick` to resize the uploaded images.
 
-![Screenshot](images/Screenshot_2024-09-04_at_3.56.49_PM.png)
+![index.php source code using the magick binary](images/Screenshot_2024-09-04_at_3.56.49_PM.png)
 
 Conveniently, the compiled `magick` binary itself was committed to the Git repository. We execute it locally to check its version:
 
-![Screenshot](images/Screenshot_2024-09-04_at_3.58.16_PM.png)
+![ImageMagick version output — 7.1.0-49](images/Screenshot_2024-09-04_at_3.58.16_PM.png)
 
 ```bash
 ./magick -version
@@ -147,6 +147,8 @@ The automated script instantly detects the new file, runs `binwalk -e` against i
 
 Our Netcat listener catches the incoming connection.
 
+![pspy64 showing root executing malwarescan.sh with binwalk](images/Screenshot_2024-09-04_at_4.13.46_PM.png)
+
 We are `root`. 🎉
 
 ---
@@ -160,4 +162,3 @@ We are `root`. 🎉
 ---
 
 *Thanks for reading! Follow for more HackTheBox walkthrough content.*
-![Screenshot](images/Screenshot_2024-09-04_at_4.13.46_PM.png)
